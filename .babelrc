@@ -1,0 +1,22 @@
+{
+    "plugins": [
+      [
+        "module-resolver",
+        {
+          "cwd": "babelrc",
+          "root": ["./src"],
+          "extensions": [".js", ".ios.js", ".android.js"],
+          "alias": {
+            "_assets": "./src/assets",
+            "_components": "./src/components",
+            "_navigations": "./src/navigations",
+            "_screens": "./src/screens",
+            "_data": "./src/data",
+            "_styles": "./src/styles",
+            "_helpers": "./src/utilities/helpers",
+            "_constants": "./src/utilities/constants"
+          }
+        }
+      ]
+    ]
+  }
