@@ -1,6 +1,8 @@
 import React from 'react';
 import {FlatList, Text, StyleSheet} from 'react-native';
 
+import { COLOR_POKE_TYPE } from '_styles/js/ColorStyle'
+
 import PokemonListItem from '_components/screen/home/Home.PokemonList.Item';
 
 const styles = StyleSheet.create({
@@ -37,7 +39,7 @@ const ListItemContainer = ({item}) => (
   />
 );
 
-const PokemonList = ({ onRefreshingList, isRefreshing, ListData, onClickItem, }) => (
+const PokemonList = ({ onRefreshingList, isRefreshing, ListData, onListEndReached, onClickItem, }) => (
   <FlatList
     horizontal={false}
     numColumns={2}
@@ -46,6 +48,7 @@ const PokemonList = ({ onRefreshingList, isRefreshing, ListData, onClickItem, })
     refreshing={isRefreshing}
     onRefresh={onRefreshingList}
     keyExtractor={item => item.id}
+    onEndReached={onListEndReached}
   />
 );
 

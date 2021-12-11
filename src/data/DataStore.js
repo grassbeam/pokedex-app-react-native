@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { DataStoreType } from '_constants';
-import PokeStore from './pokemon/Pokemon.DataStore';
+import PokeStore from './storage/pokemon/Pokemon.DataStore';
 
 
 let DataStoreReducer;
