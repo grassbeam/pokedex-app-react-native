@@ -47,4 +47,6 @@ export function debugGroupExpandCollapsed(groupTitle, items, isCollapsed) {
     }
   }
 
-  
+export function error(exception, message) {
+  console.error(exception, message);
+} 

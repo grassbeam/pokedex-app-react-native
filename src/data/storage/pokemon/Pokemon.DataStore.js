@@ -82,7 +82,7 @@ export default function PokemonStorage(state=PokeInitialState, action) {
 // ======= GETTER FUNCTION ======= //
 
 export const getDataListPageItem = (name, pokeID, idx, detailURL, isLoading=true, isError=false, data=null) => ({
-    id: pokeID,
+    id: `${pokeID}`,
     name,
     pokeID,
     idx,

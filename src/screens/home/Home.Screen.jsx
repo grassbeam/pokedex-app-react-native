@@ -27,10 +27,20 @@ const HomeScreen = (props) => {
             ...prevState,
             isRefreshing: action.data,
           });
+        case 'loadingNewData':
+          return ({
+            ...prevState,
+            ...action.data,
+            isLoadingData: true,
+          })
         case 'initUpdateData' :
           return ({
             ...prevState,
             ...action.data,
+            // pokeListData: [
+            //   ...prevState.pokeListData,
+            //   ...action.data.pokeListData,
+            // ]
           });
         default:
           return prevState;
@@ -48,28 +58,43 @@ const HomeScreen = (props) => {
         // {id: "005", name: "charmeleon", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png",},
         // {id: "006", name: "charizard", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",}
       ],
-      currentPage: 1,
-      itemPerPage: 10,
+      currentPage: 0,
+      itemPerPage: 20,
+      currentTotalData: 0,
       totalData: 0,
       nextPageURL: "",
     }
   );
 
   useEffect(()=>{
-    fetchList();
+    if (state.totalData < 1) {
+      fetchList("", true);
+    }
   });
 
 
-  const fetchList = (overrideURL="") => {
-    PokeDS.getListPokemon(20, overrideURL)
+  const fetchList = (overrideURL="", isNewRefresh=false) => {
+    console.log("Fetching API...");
+    PokeDS.getListPokemon(state.itemPerPage, overrideURL)
         .then((res) => res.data)
         .then((response)=>{
           const mapResult = response.results.map((itm,idx)=>{
               const pokeID = PokeStorage.getPokeIdFromDetailURL(itm.url);
               return PokeStorage.getDataListPageItem(itm.name.toUpperCase(), pokeID, (state.totalData+idx)
-                          , itm.url, true, false, null);
+                          , itm.url, false, false, null);
           });
-          dispatch({ type: 'initUpdateData', data: { pokeListData: [ ...state.pokeListData, ...mapResult], isLoadingData: false } })
+          dispatch({ 
+            type: 'initUpdateData', 
+            data: { 
+              pokeListData: isNewRefresh? mapResult: [ ...state.pokeListData, ...mapResult], 
+              currentTotalData: isNewRefresh? mapResult.length : state.totalData+mapResult.length, 
+              totalData: response.count,
+              nextPageURL: response.next,
+              currentPage: isNewRefresh? 1 : state.currentPage+1,
+              isLoadingData: false,
+              isRefreshing: false,
+            } 
+          })
         })
         .catch(ex=>{
           Log.error(ex);
@@ -78,16 +103,18 @@ const HomeScreen = (props) => {
 
   const onRefreshPokeList = React.useCallback(()=>{
     dispatch({ type: 'refreshing', data: true });
-    fetchList();
+    fetchList("", true);
   },[]);
 
-  const onClickItemList = (selectedItemData)=>{
-    Log.error("something clicked");
+  const onClickItemList = (selectedItemID)=>{
+    Log.debugStr(`something clicked on ${selectedItemID}`);
   };
 
-  const onListEndReached = React.useCallback(()=>{
-    dispatch({ type: 'initUpdateData', data: { isLoadingData: true, }})
-  }, []);
+  const onListEndReached = ()=>{
+    dispatch({ type: 'loadingNewData', data: { isLoadingData: true, }})
+    console.log(`List reach end`)
+    fetchList(state.nextPageURL)
+  }
 
   return (
     <SafeAreaView style={styles.container}>

@@ -29,11 +29,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const ListItemContainer = ({item}) => (
+const ListItemContainer = ({item, onClick}) => (
 
   <PokemonListItem
     itemData={item}
-    onClick={()=>{}}
+    onClick={()=>onClick(item.id)}
     style={styles}
     backgroundColor={"#000"}
   />
@@ -44,10 +44,10 @@ const PokemonList = ({ onRefreshingList, isRefreshing, ListData, onListEndReache
     horizontal={false}
     numColumns={2}
     data={ListData}
-    renderItem={ListItemContainer}
+    renderItem={({item})=> <ListItemContainer item={item} onClick={onClickItem} />}
     refreshing={isRefreshing}
     onRefresh={onRefreshingList}
-    keyExtractor={item => item.id}
+    keyExtractor={item => `pokemon-${item.id}`}
     onEndReached={onListEndReached}
   />
 );
