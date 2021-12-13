@@ -74,7 +74,7 @@ const HomeScreen = (props) => {
 
 
   const fetchList = (overrideURL="", isNewRefresh=false) => {
-    console.log("Fetching API...");
+    Log.debugStr("Fetching API")
     PokeDS.getListPokemon(state.itemPerPage, overrideURL)
         .then((res) => res.data)
         .then((response)=>{
@@ -112,7 +112,7 @@ const HomeScreen = (props) => {
 
   const onListEndReached = ()=>{
     dispatch({ type: 'loadingNewData', data: { isLoadingData: true, }})
-    console.log(`List reach end`)
+    Log.debugStr(`List reach end`)
     fetchList(state.nextPageURL)
   }
 
