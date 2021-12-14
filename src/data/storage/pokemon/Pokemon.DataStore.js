@@ -92,6 +92,11 @@ export const getDataListPageItem = (name, pokeID, idx, detailURL, isLoading=true
     data,
 });
 
+export const getListPageItemDetail = (pokeDetail) => ({
+  image: pokeDetail.sprites && pokeDetail.sprites.front_default,
+  isLoading: false,
+})
+
 export function getPokeIdFromDetailURL(detailURL) {
     
     if (!Util.isNullOrEmpty(detailURL)) {

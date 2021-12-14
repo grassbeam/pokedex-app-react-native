@@ -37,11 +37,18 @@ const HomeScreen = (props) => {
           return ({
             ...prevState,
             ...action.data,
-            // pokeListData: [
-            //   ...prevState.pokeListData,
-            //   ...action.data.pokeListData,
-            // ]
           });
+        case 'updatePokemonDetail':
+          const pokelist = [ ...prevState.pokeListData ]
+          pokelist[action.data.index] = {
+            ...pokelist[action.data.index],
+            ...action.data.detail,
+          }
+
+          return ({
+            ...prevState,
+            pokeListData: pokelist,
+          })
         default:
           return prevState;
       }
@@ -72,6 +79,8 @@ const HomeScreen = (props) => {
     }
   });
 
+  const createDispatcher = (type, data) => ({ type, data })
+
 
   const fetchList = (overrideURL="", isNewRefresh=false) => {
     Log.debugStr("Fetching API")
@@ -80,26 +89,48 @@ const HomeScreen = (props) => {
         .then((response)=>{
           const mapResult = response.results.map((itm,idx)=>{
               const pokeID = PokeStorage.getPokeIdFromDetailURL(itm.url);
-              return PokeStorage.getDataListPageItem(itm.name.toUpperCase(), pokeID, (state.totalData+idx)
-                          , itm.url, false, false, null);
+              fetchDetailPokemon(pokeID, (state.currentTotalData+idx))
+              return PokeStorage.getDataListPageItem(itm.name.toUpperCase(), pokeID, (state.currentTotalData+idx)
+                          , itm.url, true, false, null);
           });
-          dispatch({ 
-            type: 'initUpdateData', 
-            data: { 
-              pokeListData: isNewRefresh? mapResult: [ ...state.pokeListData, ...mapResult], 
-              currentTotalData: isNewRefresh? mapResult.length : state.totalData+mapResult.length, 
-              totalData: response.count,
-              nextPageURL: response.next,
-              currentPage: isNewRefresh? 1 : state.currentPage+1,
-              isLoadingData: false,
-              isRefreshing: false,
-            } 
-          })
+          dispatch(  
+            createDispatcher('initUpdateData', { 
+                pokeListData: isNewRefresh? mapResult: [ ...state.pokeListData, ...mapResult], 
+                currentTotalData: isNewRefresh? mapResult.length : state.currentTotalData+mapResult.length, 
+                totalData: response.count,
+                nextPageURL: response.next,
+                currentPage: isNewRefresh? 1 : state.currentPage+1,
+                isLoadingData: false,
+                isRefreshing: false,
+            })
+          )
         })
         .catch(ex=>{
           Log.error(ex);
         })
   };
+
+  const fetchDetailPokemon = (pokeID, arrayIndex) => {
+    PokeDS.getDetailPokemonByID(pokeID)
+      .then((res) => res.data)
+      .then((response) => {
+        Log.debugStr(`Get Detail Pokemon ${response.name}`)
+        const pokeDetail = PokeStorage.getListPageItemDetail(response)
+        dispatch(
+          createDispatcher('updatePokemonDetail', 
+            {
+              index: arrayIndex,
+              detail: pokeDetail,
+            }
+          )
+        )
+      })
+      .catch(ex=>{
+        Log.error(ex);
+      })
+  }
+
+  // const fetchSpeciesPokemon = 
 
   const onRefreshPokeList = React.useCallback(()=>{
     dispatch({ type: 'refreshing', data: true });
@@ -115,6 +146,7 @@ const HomeScreen = (props) => {
     Log.debugStr(`List reach end`)
     fetchList(state.nextPageURL)
   }
+  
 
   return (
     <SafeAreaView style={styles.container}>
