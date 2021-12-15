@@ -29,15 +29,19 @@ const styles = StyleSheet.create({
   },
 });
 
-const ListItemContainer = ({item, onClick}) => (
+const ListItemContainer = ({item, onClick}) => {
+  const objStyle = COLOR_POKE_TYPE[item && item.types && item.types[0] && item.types[0].name];
+  return (
 
-  <PokemonListItem
-    itemData={item}
-    onClick={()=>onClick(item.id)}
-    style={styles}
-    backgroundColor={"#000"}
-  />
-);
+    <PokemonListItem
+      {...objStyle}
+      itemData={item}
+      onClick={()=>onClick(item.id)}
+      style={styles}
+      // backgroundColor={"#0F0F0F"}
+    />
+  )
+}
 
 const PokemonList = ({ onRefreshingList, isRefreshing, ListData, onListEndReached, onClickItem, }) => (
   <FlatList

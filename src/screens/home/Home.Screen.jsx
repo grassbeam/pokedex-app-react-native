@@ -115,7 +115,8 @@ const HomeScreen = (props) => {
       .then((res) => res.data)
       .then((response) => {
         Log.debugStr(`Get Detail Pokemon ${response.name}`)
-        const pokeDetail = PokeStorage.getListPageItemDetail(response)
+        const pokeDetail = PokeStorage.generatePokeDataFromRemote(response)
+        pokeDetail.isLoading = false;
         dispatch(
           createDispatcher('updatePokemonDetail', 
             {

@@ -1,6 +1,9 @@
 
 
 export const COLOR_POKE_TYPE = {
+    '': {
+        backgroundColor: "#0F0F0F",
+    },
     'normal': {
         backgroundColor: '#A8A878',
     },
