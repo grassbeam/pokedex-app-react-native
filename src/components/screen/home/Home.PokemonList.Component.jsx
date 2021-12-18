@@ -1,7 +1,7 @@
 import React from 'react';
 import {FlatList, Text, StyleSheet} from 'react-native';
 
-import { COLOR_POKE_TYPE } from '_styles/js/ColorStyle'
+import * as Colors from '_styles/Colors'
 
 import PokemonListItem from '_components/screen/home/Home.PokemonList.Item';
 
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 });
 
 const ListItemContainer = ({item, onClick}) => {
-  const objStyle = COLOR_POKE_TYPE[item && item.types && item.types[0] && item.types[0].name];
+  const objStyle = Colors.COLOR_POKE_TYPE[item && item.types && item.types[0] && item.types[0].name];
   return (
 
     <PokemonListItem

@@ -91,7 +91,7 @@ const HomeScreen = (props) => {
               const pokeID = PokeStorage.getPokeIdFromDetailURL(itm.url);
               fetchDetailPokemon(pokeID, (state.currentTotalData+idx))
               return PokeStorage.getDataListPageItem(itm.name.toUpperCase(), pokeID, (state.currentTotalData+idx)
-                          , itm.url, true, false, null);
+                          , itm.url, false, false, null);
           });
           dispatch(  
             createDispatcher('initUpdateData', { 
