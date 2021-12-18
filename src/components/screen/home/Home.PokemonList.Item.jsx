@@ -1,8 +1,10 @@
 import React, { memo } from 'react';
+import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import { View, Dimensions, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import * as Colors from '_styles/Colors'
+import * as PokeStorage from '_data/storage/pokemon/Pokemon.DataStore';
 
 const styles = StyleSheet.create({
     itemContainer: {
@@ -55,38 +57,52 @@ const LoadingItem = memo(({style}) => {
     );
 });
 
-const PokemonListItem = ({ itemData, onClick, backgroundColor }) => (
-    <>
-        {
-            itemData.isLoading ?
-            <LoadingItem style={styles} />
-            :
-            <TouchableOpacity onPress={onClick} style={[styles.itemContainer, { backgroundColor }]}>
-                <Text style={styles.titleThumbnail}>{itemData.name}</Text>
-                <View style={styles.detailContainer}>
-                    <View style={styles.detailTextContainer}>
-                        {
-                            itemData && itemData.types.map((itm,idx)=>(
-                                <Text 
-                                    key={`poke-${itemData.id}-types-${idx}`}
-                                    style={[styles.textPokeType, Colors.COLOR_POKE_TYPE[itm.name || '']]}
-                                >
-                                    {(itm.name && itm.name.toUpperCase()) || "Unknown"}
-                                </Text>
-                            ))
-                        }
+const PokemonListItem = (props) => {
+
+    const { itemData, onClick } = props;
+
+    const pokeData = PokeStorage.getPokemonDataByID(props, itemData.id);
+
+    const pokeTypeColor = Colors.COLOR_POKE_TYPE[pokeData && pokeData.data.types && pokeData.data.types[0] && pokeData.data.types[0].name];
+
+    return (
+        <>
+            {
+                pokeData && !pokeData.isError && pokeData.data ?
+                <TouchableOpacity onPress={onClick} style={[styles.itemContainer, { ...pokeTypeColor }]}>
+                    <Text style={styles.titleThumbnail}>{pokeData.data.name}</Text>
+                    <View style={styles.detailContainer}>
+                        <View style={styles.detailTextContainer}>
+                            {
+                                pokeData && pokeData.data.types.map((itm,idx)=>(
+                                    <Text 
+                                        key={`poke-${pokeData.data.id}-types-${idx}`}
+                                        style={[styles.textPokeType, Colors.COLOR_POKE_TYPE[itm.name || '']]}
+                                    >
+                                        {(itm.name && itm.name.toUpperCase()) || "Unknown"}
+                                    </Text>
+                                ))
+                            }
+                        </View>
+                        <Image
+                            style={styles.imagePoke}
+                            source={{ uri: (pokeData.data.image.other.official_artwork || pokeData.data.image.front_default) }}
+                        />
                     </View>
-                    <Image
-                        style={styles.imagePoke}
-                        source={{ uri: itemData.image }}
-                    />
-                </View>
-            </TouchableOpacity>
-        }
-    </>
-)
+                </TouchableOpacity>
+                :
+                <LoadingItem style={styles} />
+                
+            }
+        </>
+    )
+}
 
 
-export default PokemonListItem;
+const mapStateToProps = state => ({
+    [PokeStorage.STORAGE_POKE_DATA]: PokeStorage.getStorageByName(state, PokeStorage.STORAGE_POKE_DATA),
+})
+  
+export default connect(mapStateToProps)(PokemonListItem);
 
 
