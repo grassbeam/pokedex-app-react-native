@@ -66,7 +66,7 @@ const HomeScreen = (props) => {
         // {id: "006", name: "charizard", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",}
       ],
       currentPage: 0,
-      itemPerPage: 15,
+      itemPerPage: 20,
       currentTotalData: 0,
       totalData: 0,
       nextPageURL: "",
@@ -151,15 +151,18 @@ const HomeScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ flex: (state.pokeListData.length > 0?10:0), justifyContent: 'center' }}>
-        <PokemonList
-          onRefreshingList={onRefreshPokeList}
-          isRefreshing={state.isRefreshing}
-          ListData={state.pokeListData}
-          onClickItem={onClickItemList}
-          onListEndReached={onListEndReached}
-        />
-      </View>
+      {
+        state.pokeListData.length > 0 &&   
+        <View style={{ flex: (state.pokeListData.length > 0?10:0), justifyContent: 'center' }}>
+          <PokemonList
+            onRefreshingList={onRefreshPokeList}
+            isRefreshing={state.isRefreshing}
+            ListData={state.pokeListData}
+            onClickItem={onClickItemList}
+            onListEndReached={onListEndReached}
+          />
+        </View>
+      }
       {
         state.isLoadingData && (
         <View style={{ flex: 1, justifyContent: 'center' }}>
