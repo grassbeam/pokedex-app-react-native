@@ -66,7 +66,7 @@ const HomeScreen = (props) => {
         // {id: "006", name: "charizard", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",}
       ],
       currentPage: 0,
-      itemPerPage: 20,
+      itemPerPage: 15,
       currentTotalData: 0,
       totalData: 0,
       nextPageURL: "",
@@ -91,7 +91,7 @@ const HomeScreen = (props) => {
               const pokeID = PokeStorage.getPokeIdFromDetailURL(itm.url);
               fetchDetailPokemon(pokeID, (state.currentTotalData+idx))
               return PokeStorage.getDataListPageItem(itm.name.toUpperCase(), pokeID, (state.currentTotalData+idx)
-                          , itm.url, false, false, null);
+                          , itm.url, true, false, null);
           });
           dispatch(  
             createDispatcher('initUpdateData', { 

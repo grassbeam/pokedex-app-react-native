@@ -5,29 +5,6 @@ import * as Colors from '_styles/Colors'
 
 import PokemonListItem from '_components/screen/home/Home.PokemonList.Item';
 
-const styles = StyleSheet.create({
-  itemContainer: {
-    flex: 1,
-    alignItems: 'flex-end',
-    borderWidth: 2,
-    borderColor: 'black',
-    borderRadius: 10,
-    marginTop: 20,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  imageThumbnail: {
-    width: 100,
-    height: 100,
-  },
-  titleThumbnail: {
-    width: '100%',
-    textAlign: 'center',
-    fontSize: 24,
-    textTransform: 'capitalize',
-    color: 'white',
-  },
-});
 
 const ListItemContainer = ({item, onClick}) => {
   const objStyle = Colors.COLOR_POKE_TYPE[item && item.types && item.types[0] && item.types[0].name];
@@ -37,7 +14,6 @@ const ListItemContainer = ({item, onClick}) => {
       {...objStyle}
       itemData={item}
       onClick={()=>onClick(item.id)}
-      style={styles}
       // backgroundColor={"#0F0F0F"}
     />
   )
@@ -53,6 +29,7 @@ const PokemonList = ({ onRefreshingList, isRefreshing, ListData, onListEndReache
     onRefresh={onRefreshingList}
     keyExtractor={item => `pokemon-${item.id}`}
     onEndReached={onListEndReached}
+    removeClippedSubviews={true}
   />
 );
 

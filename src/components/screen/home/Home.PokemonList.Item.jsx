@@ -1,10 +1,50 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { View, Dimensions, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import * as Colors from '_styles/Colors'
 
+const styles = StyleSheet.create({
+    itemContainer: {
+      flex: 1,
+    //   alignItems: 'flex-end',
+      borderWidth: 2,
+      borderColor: 'black',
+      borderRadius: 10,
+      marginTop: 20,
+      marginLeft: 10,
+      marginRight: 10,
+    },
+    titleThumbnail: {
+      width: '100%',
+      textAlign: 'center',
+      fontSize: 24,
+      textTransform: 'capitalize',
+      color: 'white',
+    },
+    detailContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center', //Centered vertically
+    },
+    imagePoke: {
+      width: '50%',
+      height: 100,
+    },
+    detailTextContainer: {
+        width: '50%',
+    },
+    textPokeType: {
+        textAlign: 'center',
+        color: '#FFFFFF',
+        borderWidth: 2,
+        borderColor: 'black',
+        borderRadius: 5,
+        margin: 5,
+    }
+  });
 
-const LoadingItem = ({style}) => {
+const LoadingItem = memo(({style}) => {
     const { width, height } = Dimensions.get("window");
     return(
         <SkeletonPlaceholder>
@@ -13,20 +53,34 @@ const LoadingItem = ({style}) => {
             </View>
         </SkeletonPlaceholder>
     );
-};
+});
 
-const PokemonListItem = ({ itemData, onClick, style, backgroundColor }) => (
+const PokemonListItem = ({ itemData, onClick, backgroundColor }) => (
     <>
         {
             itemData.isLoading ?
-            <LoadingItem style={style} />
+            <LoadingItem style={styles} />
             :
-            <TouchableOpacity onPress={onClick} style={[style.itemContainer, { backgroundColor }]}>
-                <Text style={style.titleThumbnail}>{itemData.name}</Text>
-                <Image
-                    style={style.imageThumbnail}
-                    source={{ uri: itemData.image }}
-                />
+            <TouchableOpacity onPress={onClick} style={[styles.itemContainer, { backgroundColor }]}>
+                <Text style={styles.titleThumbnail}>{itemData.name}</Text>
+                <View style={styles.detailContainer}>
+                    <View style={styles.detailTextContainer}>
+                        {
+                            itemData && itemData.types.map((itm,idx)=>(
+                                <Text 
+                                    key={`poke-${itemData.id}-types-${idx}`}
+                                    style={[styles.textPokeType, Colors.COLOR_POKE_TYPE[itm.name || '']]}
+                                >
+                                    {(itm.name && itm.name.toUpperCase()) || "Unknown"}
+                                </Text>
+                            ))
+                        }
+                    </View>
+                    <Image
+                        style={styles.imagePoke}
+                        source={{ uri: itemData.image }}
+                    />
+                </View>
             </TouchableOpacity>
         }
     </>
