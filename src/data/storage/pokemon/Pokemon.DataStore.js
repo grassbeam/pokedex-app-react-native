@@ -1,62 +1,61 @@
-import { DataStoreType } from '_constants';
+import { createSlice } from '@reduxjs/toolkit';
+import { Config } from '_constants';
 import * as Util from '_helpers/Util';
 
-
+export const STORAGE_NAME_POKEMON = Config.IS_DEBUG? "PokeStorage" : "_PKS"
 
 export const STORAGE_LAST_ACTION = "LastAction";
+export const STORAGE_POKE_LIST = "PokeListId";
 export const STORAGE_POKE_DATA = "PokeData";
 export const STORAGE_POKE_SPECIES = "PokeSpecies";
 export const STORAGE_POKE_COMPARE = "PokeCompareStatus";
 
 
 
-const PokeInitialState = {
+const initialState = {
     [STORAGE_LAST_ACTION]: null, // for logging last component updating this storage
+    [STORAGE_POKE_LIST]: {
+      ListPokeID: [], // List ID Pokemon Ascending
+      NextUpdateURL: "",
+      TotalCount: 0,
+    },
     [STORAGE_POKE_DATA]: {  }, // pokemon data, object key using PokemonID
     [STORAGE_POKE_SPECIES]: { }, // pokemon species object
     [STORAGE_POKE_COMPARE]: {  }, // index = pokemonID, value 0/1/99 => 0=failed or not found, 1=success, 99=waiting
 }
 
+export const PokemonSlice = createSlice({
+  name: STORAGE_NAME_POKEMON,
+  initialState,
+  reducers: {
+      resetAllData: _ => initialState,
+      setPokeData: (state, action) => {
+        state[STORAGE_POKE_DATA] = {
+          ...state[STORAGE_POKE_DATA],
+          ...action.value,
+        }
+        state[STORAGE_LAST_ACTION] = "setPokeData"
+      },
+      setPokeSpeciesData: (state, action) => {
+        state[STORAGE_POKE_SPECIES] = {
+          ...state[STORAGE_POKE_SPECIES],
+          ...action.value,
+        }
+        state[STORAGE_LAST_ACTION] = "setPokeSpeciesData"
+      },
 
-export default function PokemonStorage(state=PokeInitialState, action) {
-    if (action.type == DataStoreType.POKE_STORAGE) {
-      if (action.strloc === STORAGE_POKE_DATA) {
-        return {
-            ...state,
-            [STORAGE_LAST_ACTION]: action.payload,
-            [action.strloc]: {
-                ...state[action.strloc],
-                ...action.value
-            }
-        };
-      } else if (action.strloc === STORAGE_POKE_SPECIES) {
-        return {
-            ...state,
-            [STORAGE_LAST_ACTION]: action.payload,
-            [action.strloc]: {
-                ...state[action.strloc],
-                ...action.value
-            }
-        };
-      } else if (action.strloc === STORAGE_POKE_COMPARE) {
-        return {
-            ...state,
-            [STORAGE_LAST_ACTION]: action.payload,
-            [action.strloc]: {
-                ...state[action.strloc],
-                ...action.value
-            }
-        };
-      } else
-          return {
-              ...state,
-              [STORAGE_LAST_ACTION]: action.payload,
-              [action.strloc]: action.value
-          };
-
-    } else return state;
   }
+})
 
+// Reducer Storage
+export default PokemonSlice.reducer;
+
+// Action Dispatcher
+export const {
+  resetAllData,
+  setPokeData,
+  setPokeSpeciesData,
+} = PokemonSlice.actions;
 
   export function generatePokeDataFromRemote(response) {
     return ({
