@@ -43,8 +43,11 @@
     "eslint": "^6.5.1",
     "jest": "^25.1.0",
     "metro-react-native-babel-preset": "^0.59.0",
+    "react-native-debugger-open": "^0.3.25",
     "react-test-renderer": "16.13.1",
-    "redux-devtools": "^3.7.0"
+    "redux-devtools": "^3.7.0",
+    "remote-redux-devtools": "^0.5.0",
+    "remotedev-rn-debugger": "^0.8.4"
   },
   "jest": {
     "preset": "react-native"

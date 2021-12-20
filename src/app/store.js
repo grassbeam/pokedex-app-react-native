@@ -1,6 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {combineReducers} from "redux"; 
-import { persistStore, persistReducer } from 'redux-persist'
+import { persistStore, persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER, } from 'redux-persist'
 import thunk from 'redux-thunk';
 import { encryptTransform } from 'redux-persist-transform-encrypt';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,19 +20,20 @@ const reducers = combineReducers({
 })
 
 const persistConfig = {
-  key: 'root',
-  transforms: Config.IS_DEBUG?[]:
-  [
-    encryptTransform({
-      secretKey: Config._ENCRYPT,
-      onError: function (err) {
-        // Handle the error.
-        //   Log.debugGroup("encryptor error", error);
-      },
-    }),
-  ],
+  key: 'primary',
+  keyPrefix: 'pokemon', // the redux-persist default `persist:` doesn't work with some file systems
   storage: AsyncStorage,
-
+  version: 1,
+  // transforms: Config.IS_DEBUG?[]:
+  // [
+  //   encryptTransform({
+  //     secretKey: Config._ENCRYPT,
+  //     onError: function (err) {
+  //       // Handle the error.
+  //       //   Log.debugGroup("encryptor error", error);
+  //     },
+  //   }),
+  // ],
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers);
@@ -35,7 +42,13 @@ const persistedReducer = persistReducer(persistConfig, reducers);
 const store = configureStore({
   reducer: persistedReducer,
   devTools: process.env.NODE_ENV !== 'production',
-  middleware: [thunk]
+  // middleware: [thunk],
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        warnAfter: 5000,
+      },
+  }),
 });
 
 const persistor = persistStore(store);

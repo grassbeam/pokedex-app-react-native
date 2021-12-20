@@ -38,6 +38,7 @@ class HomeScreen extends Component {
   componentDidMount() {    
     if (this.props.PokeListData && this.props.PokeListData.ListPokeID && this.props.PokeListData.ListPokeID.length < 1) {
       this.fetchList("");
+      // Log.debugStr("Fetching the list")
     }
   }
 
@@ -68,9 +69,9 @@ class HomeScreen extends Component {
           const mapResult = response.results.map((itm,idx)=>{
               const pokeID = PokeStorage.getPokeIdFromDetailURL(itm.url);
               this.fetchDetailPokemon(pokeID)
-              return PokeStorage.generatePokeListData(pokeID, itm.name, itm.url);
+              return PokeStorage.generatePokeListData(pokeID, itm.name);
           });
-          Log.debugStr(`Response mapResult ${mapResult.length}`)
+          // Log.debugStr(`Response mapResult ${mapResult.length}`)
           this.props.updatePokeListData({
             ListPokeID: mapResult,
             NextUpdateURL: response.next,

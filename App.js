@@ -8,11 +8,11 @@ import AppContainer from './src/AppContainer';
 function App (props) {
 
     return (
-        <PersistGate persistor={persistor}>
-            <Provider store={store}>
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
                 <AppContainer />
-            </Provider>
-        </PersistGate>
+            </PersistGate>
+        </Provider>
     );
 }
 

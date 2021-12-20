@@ -1,4 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER, } from 'redux-persist'
 import { Config } from '_constants';
 import * as Util from '_helpers/Util';
 
@@ -63,7 +69,12 @@ export const PokemonSlice = createSlice({
         state[STORAGE_LAST_ACTION] = "setPokeSpeciesData"
       },
 
-  }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(REHYDRATE, (state) => {
+      console.log('in rehydrate')
+    });
+  },
 })
 
 // Reducer Storage
@@ -103,8 +114,8 @@ export function generatePokeDataFromRemote(response) {
     });
 };
 
-export const generatePokeListData = (id, name, detailURL) => ({
-  id, name, detailURL,
+export const generatePokeListData = (id, name) => ({
+  id, name,
 });
 
 export const generatePokeDataSavingStorage = (pokeID, data, isError=false) => ({
