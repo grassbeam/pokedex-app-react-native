@@ -19,6 +19,13 @@ export const getDetailPokemonByURL = async (detailURL) => axios.get(detailURL);
 
 export const getDetailPokemonByID = async (pokeID) => axios.get(`${Config.BASE_API}${Config.API_VERSION}/pokemon/${pokeID}`);
 
+export const getDetailPokemonsByID = async (arrPokeID) => {
+    return axios.all([...(
+        arrPokeID.map(id=>getDetailPokemonByID(id))
+    )])
+        .then(axios.spread((...responses) => responses))
+}
+
 export const getSpeciesPokemonByID = async (pokeID) => axios.get(`${Config.BASE_API}${Config.API_VERSION}/pokemon-species/${pokeID}`);
 
 export const getDetailAndSpeciesPokemonByID = async (pokeID) => {

@@ -6,6 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "start-debug": "set REACT_DEBUGGER=\"rndebugger-open --open --port 8081\" && react-native start",
     "test": "jest",
     "lint": "eslint ."
   },

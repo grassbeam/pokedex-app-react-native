@@ -39,6 +39,8 @@ class HomeScreen extends Component {
     if (this.props.PokeListData && this.props.PokeListData.ListPokeID && this.props.PokeListData.ListPokeID.length < 1) {
       this.fetchList("");
       // Log.debugStr("Fetching the list")
+    } else {
+      Log.debugStr(`Data Length: ${this.props.PokeListData.ListPokeID.length}`)
     }
   }
 
@@ -66,9 +68,11 @@ class HomeScreen extends Component {
     PokeDS.getListPokemon(this.state.itemPerPage, overrideURL)
         .then((res) => res.data)
         .then((response)=>{
+          let arrPokeID = []
           const mapResult = response.results.map((itm,idx)=>{
               const pokeID = PokeStorage.getPokeIdFromDetailURL(itm.url);
-              this.fetchDetailPokemon(pokeID)
+              arrPokeID.push(pokeID)
+              // this.fetchDetailPokemon(pokeID)
               return PokeStorage.generatePokeListData(pokeID, itm.name);
           });
           // Log.debugStr(`Response mapResult ${mapResult.length}`)
@@ -78,12 +82,34 @@ class HomeScreen extends Component {
             TotalCount: response.count,
           })
           this.removeAllSpinnerLoading();
+          this.fetchDetailPokemons(arrPokeID)
         })
         .catch(ex=>{
           Log.error(ex);
           this.removeAllSpinnerLoading({ isError: true });
         })
   };
+
+  fetchDetailPokemons = (arrPokeID) => {
+    PokeDS.getDetailPokemonsByID(arrPokeID)
+      .then((responses) => responses.map(res=>res.data))
+      .then((result) => {
+        let objSavingdata = {}
+        result.forEach(response => {
+          Log.debugStr(`Get Detail Pokemon ${response.name}`)
+          const pokeDetailData = PokeStorage.generatePokeDataFromRemote(response)
+          objSavingdata = { ...objSavingdata, ...PokeStorage.generatePokeDataSavingStorage(response.id, pokeDetailData), }
+        });
+        // const pokeDetailData = PokeStorage.generatePokeDataFromRemote(response)
+        // this.props.setPokeDetailData(PokeStorage.generatePokeDataSavingStorage(pokeID, pokeDetailData))
+        this.props.setPokeDetailData(objSavingdata)
+      })
+      .catch(ex=>{
+        Log.error(ex);
+        // this.props.setPokeDetailData(PokeStorage.generatePokeDataSavingStorage(pokeID, null, true))
+      })
+
+  }
 
   fetchDetailPokemon = (pokeID) => {
     PokeDS.getDetailPokemonByID(pokeID)
@@ -95,6 +121,7 @@ class HomeScreen extends Component {
       })
       .catch(ex=>{
         Log.error(ex);
+        this.props.setPokeDetailData(PokeStorage.generatePokeDataSavingStorage(pokeID, null, true))
       })
   }
 

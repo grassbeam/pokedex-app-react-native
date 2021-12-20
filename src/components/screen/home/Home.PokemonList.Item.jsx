@@ -1,10 +1,11 @@
-import React, { memo } from 'react';
-import { connect } from "react-redux";
+import React, { memo, useEffect } from 'react';
+import {  shallowEqual, useSelector  } from "react-redux";
 import PropTypes from 'prop-types';
 import { View, Dimensions, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import * as Colors from '_styles/Colors'
 import * as PokeStorage from '_data/storage/pokemon/Pokemon.DataStore';
+import { Log, } from '_helpers';
 
 const styles = StyleSheet.create({
     itemContainer: {
@@ -57,13 +58,28 @@ const LoadingItem = memo(({style}) => {
     );
 });
 
-const PokemonListItem = (props) => {
+export default function PokemonListItem(props) {
 
     const { itemData, onClick } = props;
 
-    const pokeData = PokeStorage.getPokemonDataByID(props, itemData.id);
+    
+    // const pokeData = useSelector((state) => state[PokeStorage.STORAGE_NAME_POKEMON][PokeStorage.STORAGE_POKE_DATA][itemData.id], shallowEqual);
+    const pokeData = useSelector((state)=>PokeStorage.selectorPokemonDataByID(state,itemData.id), shallowEqual);
+    // const pokeData = PokeStorage.getPokemonDataByID(props, itemData.id);
 
     const pokeTypeColor = Colors.COLOR_POKE_TYPE[pokeData && pokeData.data.types && pokeData.data.types[0] && pokeData.data.types[0].name];
+
+
+
+    useEffect(()=>{
+        Log.debugStr(`Re-Render finished on ${itemData.id}`)
+
+        const unmounted = ()=> {
+            Log.debugStr(`Component unmounted on ${itemData.id}`)
+        }
+
+        return unmounted
+    })
 
     return (
         <>
@@ -99,10 +115,10 @@ const PokemonListItem = (props) => {
 }
 
 
-const mapStateToProps = state => ({
-    [PokeStorage.STORAGE_POKE_DATA]: PokeStorage.getStorageByName(state, PokeStorage.STORAGE_POKE_DATA),
-})
+// const mapStateToProps = state => ({
+//     [PokeStorage.STORAGE_POKE_DATA]: PokeStorage.getStorageByName(state, PokeStorage.STORAGE_POKE_DATA),
+// })
   
-export default connect(mapStateToProps)(PokemonListItem);
+// export default connect(mapStateToProps)(PokemonListItem);
 
 

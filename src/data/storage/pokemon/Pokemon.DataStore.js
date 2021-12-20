@@ -5,6 +5,7 @@ import { FLUSH,
   PERSIST,
   PURGE,
   REGISTER, } from 'redux-persist'
+import { createSelector } from 'reselect'
 import { Config } from '_constants';
 import * as Util from '_helpers/Util';
 
@@ -55,10 +56,15 @@ export const PokemonSlice = createSlice({
         state[STORAGE_LAST_ACTION] = "updatePokeListData"
       },
       setPokeDetailData: (state, action) => {
-        state[STORAGE_POKE_DATA] = {
-          ...state[STORAGE_POKE_DATA],
-          ...action.payload,
-        }
+        let tmpPokeData = state[STORAGE_POKE_DATA]
+        Object.keys(action.payload).forEach(key => {
+          tmpPokeData[key] = action.payload[key]
+        });
+        state[STORAGE_POKE_DATA] = tmpPokeData
+        // state[STORAGE_POKE_DATA] = {
+        //   ...state[STORAGE_POKE_DATA],
+        //   ...action.payload,
+        // }
         state[STORAGE_LAST_ACTION] = "setPokeDetailData"
       },
       setPokeSpeciesData: (state, action) => {
@@ -125,6 +131,11 @@ export const generatePokeDataSavingStorage = (pokeID, data, isError=false) => ({
 // ======= END OF GENERATOR FUNCTION ======= //
 
 
+export const selectorPokemonDataByID = createSelector(
+  (state) => state[STORAGE_NAME_POKEMON][STORAGE_POKE_DATA],
+  (_, pokeID) => pokeID,
+  (pokeData, pokeID) => pokeData[pokeID]
+)
 
 
 // ======= GETTER FUNCTION ======= //

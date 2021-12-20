@@ -23,6 +23,7 @@ const PokemonList = ({ onRefreshingList, isRefreshing, ListData, onListEndReache
     horizontal={false}
     numColumns={2}
     bounces={false}
+    onEndReachedThreshold={0.1}
     data={ListData}
     renderItem={({item})=> <ListItemContainer item={item} onClick={onClickItem} />}
     refreshing={isRefreshing}
