@@ -20,7 +20,7 @@ export default function MainNav() {
         name="Home" 
         component={HomeScreen} 
         options={{
-          tabBarLabel: 'Pokemon List',
+          tabBarLabel: 'Pokemon',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="pokeball" color={color} size={26} />
           ),
@@ -33,7 +33,7 @@ export default function MainNav() {
         options={{
           tabBarLabel: 'Compare',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+            <MaterialCommunityIcons name="compare-horizontal" color={color} size={26} />
           ),
         }}
       />
