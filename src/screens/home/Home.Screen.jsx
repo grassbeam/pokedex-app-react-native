@@ -135,6 +135,7 @@ class HomeScreen extends Component {
 
   onClickItemList = (selectedItemID)=>{
     Log.debugStr(`something clicked on ${selectedItemID}`);
+    this.props.navigation.navigate('DetailPokemon', { PokeID: selectedItemID, })
   };
 
   onListEndReached = ()=>{

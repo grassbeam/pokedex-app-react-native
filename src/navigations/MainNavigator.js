@@ -11,7 +11,7 @@ export default function MainNav() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Root" component={HomeNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="Detail Pokemon" component={DetailScreen} />
+      <Stack.Screen name="DetailPokemon" component={DetailScreen} options={{ title: "Detail Pokemon" }} />
     </Stack.Navigator>
   );
 }

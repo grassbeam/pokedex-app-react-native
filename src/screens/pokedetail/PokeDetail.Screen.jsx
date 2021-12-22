@@ -1,9 +1,9 @@
 import React from 'react';
 import {SafeAreaView, Text, TouchableHighlight} from 'react-native';
 
-const PokeDetail = ({navigation}) => (
+const PokeDetail = ({ route, navigation, }) => (
   <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Detail Pokemon here</Text>
+    <Text>Detail Pokemon { route.params.PokeID }</Text>
   </SafeAreaView>
 );
 
