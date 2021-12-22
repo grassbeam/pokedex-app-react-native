@@ -24,16 +24,16 @@ const persistConfig = {
   keyPrefix: 'pokemon', // the redux-persist default `persist:` doesn't work with some file systems
   storage: AsyncStorage,
   version: 1,
-  // transforms: Config.IS_DEBUG?[]:
-  // [
-  //   encryptTransform({
-  //     secretKey: Config._ENCRYPT,
-  //     onError: function (err) {
-  //       // Handle the error.
-  //       //   Log.debugGroup("encryptor error", error);
-  //     },
-  //   }),
-  // ],
+  transforms: Config.IS_DEBUG?[]:
+  [
+    encryptTransform({
+      secretKey: Config._ENCRYPT,
+      onError: function (err) {
+        // Handle the error.
+        //   Log.debugGroup("encryptor error", error);
+      },
+    }),
+  ],
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers);
