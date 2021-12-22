@@ -22,12 +22,13 @@ const PokemonList = ({ onRefreshingList, isRefreshing, ListData, onListEndReache
   <FlatList
     horizontal={false}
     numColumns={2}
-    bounces={false}
+    initialNumToRender={10}
+    // bounces={false}
     onEndReachedThreshold={0.1}
     data={ListData}
     renderItem={({item})=> <ListItemContainer item={item} onClick={onClickItem} />}
-    refreshing={isRefreshing}
-    onRefresh={onRefreshingList}
+    // refreshing={isRefreshing}
+    // onRefresh={onRefreshingList}
     keyExtractor={item => `pokemon-${item.id}`}
     onEndReached={onListEndReached}
     removeClippedSubviews={true}

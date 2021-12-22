@@ -36,6 +36,7 @@ class HomeScreen extends Component {
   }
 
   componentDidMount() {    
+    this._ismounted = true;
     if (this.props.PokeListData && this.props.PokeListData.ListPokeID && this.props.PokeListData.ListPokeID.length < 1) {
       this.fetchList("");
       // Log.debugStr("Fetching the list")
@@ -44,16 +45,20 @@ class HomeScreen extends Component {
     }
   }
 
+  componentWillUnmount() {
+     this._ismounted = false;
+  }
+
   toogleLoadingdata = (isLoadingData) =>{
-    this.setState({ ...this.state, isLoadingData, })
+    this._ismounted && this.setState({ ...this.state, isLoadingData, })
   }
 
   toogleRefreshing = (isRefreshing) => {
-    this.setState({ ...this.state, isRefreshing, })
+    this._ismounted && this.setState({ ...this.state, isRefreshing, })
   }
 
   removeAllSpinnerLoading = (additionalState = {}) => {
-    this.setState({
+    this._ismounted && this.setState({
       ...this.state,
       ...additionalState,
       isLoadingData: false,
@@ -81,8 +86,8 @@ class HomeScreen extends Component {
             NextUpdateURL: response.next,
             TotalCount: response.count,
           })
-          this.removeAllSpinnerLoading();
           this.fetchDetailPokemons(arrPokeID)
+          this.removeAllSpinnerLoading();
         })
         .catch(ex=>{
           Log.error(ex);
@@ -100,8 +105,6 @@ class HomeScreen extends Component {
           const pokeDetailData = PokeStorage.generatePokeDataFromRemote(response)
           objSavingdata = { ...objSavingdata, ...PokeStorage.generatePokeDataSavingStorage(response.id, pokeDetailData), }
         });
-        // const pokeDetailData = PokeStorage.generatePokeDataFromRemote(response)
-        // this.props.setPokeDetailData(PokeStorage.generatePokeDataSavingStorage(pokeID, pokeDetailData))
         this.props.setPokeDetailData(objSavingdata)
       })
       .catch(ex=>{
@@ -124,8 +127,6 @@ class HomeScreen extends Component {
         this.props.setPokeDetailData(PokeStorage.generatePokeDataSavingStorage(pokeID, null, true))
       })
   }
-
-  // const fetchSpeciesPokemon = 
 
   onRefreshPokeList = ()=>{
     this.toogleRefreshing(true);
