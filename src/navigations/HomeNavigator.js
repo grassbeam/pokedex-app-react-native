@@ -9,7 +9,7 @@ import PokeCompare from '_screens/pokecompare/PokeCompare.Screen';
 
 const Tab = createBottomTabNavigator();
 
-export default function MainNav() {
+export default function HomeNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -20,22 +20,25 @@ export default function MainNav() {
         name="Home" 
         component={HomeScreen} 
         options={{
-          tabBarLabel: 'Pokemon',
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="pokeball" color={color} size={26} />
-          ),
+            headerShown: false,
+            tabBarLabel: 'Pokemon',
+            tabBarIcon: ({ color }) => (
+                <MaterialCommunityIcons name="pokeball" color={color} size={26} />
+            ),
         }}
-
       />
+
       <Tab.Screen 
         name="Compare" 
         component={PokeCompare} 
         options={{
-          tabBarLabel: 'Compare',
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="compare-horizontal" color={color} size={26} />
-          ),
+            headerShown: false,
+            tabBarLabel: 'Compare',
+            tabBarIcon: ({ color }) => (
+                <MaterialCommunityIcons name="compare-horizontal" color={color} size={26} />
+            ),
         }}
+      
       />
     </Tab.Navigator>
   );
