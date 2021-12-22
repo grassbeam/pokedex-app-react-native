@@ -3,6 +3,7 @@ import {  shallowEqual, useSelector  } from "react-redux";
 import PropTypes from 'prop-types';
 import { View, Dimensions, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import PokeTypeList from '_components/pokemon/typelist'
 import * as Colors from '_styles/Colors'
 import * as PokeStorage from '_data/storage/pokemon/Pokemon.DataStore';
 import { Log, } from '_helpers';
@@ -58,7 +59,7 @@ const LoadingItem = memo(({style}) => {
     );
 });
 
-export default function PokemonListItem(props) {
+const PokemonListItem = memo((props) => {
 
     const { itemData, onClick } = props;
 
@@ -88,18 +89,10 @@ export default function PokemonListItem(props) {
                 <TouchableOpacity onPress={onClick} style={[styles.itemContainer, { ...pokeTypeColor }]}>
                     <Text style={styles.titleThumbnail}>{pokeData.data.name}</Text>
                     <View style={styles.detailContainer}>
-                        <View style={styles.detailTextContainer}>
-                            {
-                                pokeData && pokeData.data.types.map((itm,idx)=>(
-                                    <Text 
-                                        key={`poke-${pokeData.data.id}-types-${idx}`}
-                                        style={[styles.textPokeType, Colors.COLOR_POKE_TYPE[itm.name || '']]}
-                                    >
-                                        {(itm.name && itm.name.toUpperCase()) || "Unknown"}
-                                    </Text>
-                                ))
-                            }
-                        </View>
+                        <PokeTypeList 
+                            style={styles.detailTextContainer}
+                            dataTypes={pokeData.data.types}
+                        />
                         <Image
                             style={styles.imagePoke}
                             source={{ uri: (pokeData.data.image.other.official_artwork || pokeData.data.image.front_default) }}
@@ -112,8 +105,9 @@ export default function PokemonListItem(props) {
             }
         </>
     )
-}
+})
 
+export default PokemonListItem
 
 // const mapStateToProps = state => ({
 //     [PokeStorage.STORAGE_POKE_DATA]: PokeStorage.getStorageByName(state, PokeStorage.STORAGE_POKE_DATA),

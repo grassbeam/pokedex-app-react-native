@@ -1,22 +1,7 @@
-import React, { memo } from 'react';
-import {FlatList, Text, StyleSheet} from 'react-native';
+import React from 'react';
+import {FlatList } from 'react-native';
 
 import PokemonListItem from '_components/screen/home/Home.PokemonList.Item';
-
-
-const ListItemContainer = memo(({item, onClick}) => {
-    // const objStyle = Colors.COLOR_POKE_TYPE[item && item.types && item.types[0] && item.types[0].name];
-    return (
-
-      <PokemonListItem
-        // {...objStyle}
-        itemData={item}
-        onClick={()=>onClick(item.id)}
-        // backgroundColor={"#0F0F0F"}
-      />
-    )
-  }
-)
 
 const PokemonList = ({ onRefreshingList, isRefreshing, ListData, onListEndReached, onClickItem, }) => (
   <FlatList
@@ -26,7 +11,7 @@ const PokemonList = ({ onRefreshingList, isRefreshing, ListData, onListEndReache
     // bounces={false}
     onEndReachedThreshold={0.1}
     data={ListData}
-    renderItem={({item})=> <ListItemContainer item={item} onClick={onClickItem} />}
+    renderItem={({item})=> <PokemonListItem itemData={item} onClick={()=>onClickItem(item.id)} />}
     // refreshing={isRefreshing}
     // onRefresh={onRefreshingList}
     keyExtractor={item => `pokemon-${item.id}`}

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from "react-redux";
 import { SafeAreaView, View, ActivityIndicator, StyleSheet} from 'react-native';
 import { Log, } from '_helpers';
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class HomeScreen extends Component {
+class HomeScreen extends PureComponent {
 
   constructor(props) {
     super(props);
@@ -134,7 +134,6 @@ class HomeScreen extends Component {
   }
 
   onClickItemList = (selectedItemID)=>{
-    Log.debugStr(`something clicked on ${selectedItemID}`);
     this.props.navigation.navigate('DetailPokemon', { PokeID: selectedItemID, })
   };
 
