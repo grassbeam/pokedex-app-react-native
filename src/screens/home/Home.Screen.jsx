@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { SafeAreaView, View, ActivityIndicator, StyleSheet} from 'react-native';
 import { Log, } from '_helpers';
 import PokemonList from '_components/screen/home/Home.PokemonList.Component';
-import * as PokeDS from '_data/source/pokemon/Pokemon.DataSource';
+import * as PokeDS from '_data/services/pokemon/Pokemon.DataSource';
 import * as PokeStorage from '_data/storage/pokemon/Pokemon.DataStore';
 
 const styles = StyleSheet.create({
