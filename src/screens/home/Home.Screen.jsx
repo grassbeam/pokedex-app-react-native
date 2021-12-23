@@ -150,7 +150,7 @@ class HomeScreen extends PureComponent {
       <SafeAreaView style={styles.container}>
         {
           this.props.PokeListData && this.props.PokeListData.ListPokeID && this.props.PokeListData.ListPokeID.length > 0 &&   
-          <View style={{ flex: (this.props.PokeListData.ListPokeID > 0?10:0), justifyContent: 'center' }}>
+          <View style={{ flex: (this.props.PokeListData.ListPokeID > 0?1:0), justifyContent: 'center' }}>
             <PokemonList
               onRefreshingList={this.onRefreshPokeList}
               isRefreshing={this.state.isRefreshing}

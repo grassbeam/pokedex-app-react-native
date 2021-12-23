@@ -1,5 +1,5 @@
-import React, { memo, useEffect } from 'react';
-import {  shallowEqual, useSelector  } from "react-redux";
+import React, { memo, useEffect, useCallback, } from 'react';
+import {  shallowEqual, useSelector, useDispatch,  } from "react-redux";
 import PropTypes from 'prop-types';
 import { View, Dimensions, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
@@ -61,14 +61,20 @@ const LoadingItem = memo(({style}) => {
 
 const PokemonListItem = memo((props) => {
 
-    const { itemData, onClick } = props;
+    const { itemData, onClick } = props
 
+    const dispatch = useDispatch()
+
+    const incrementCounter = useCallback(
+      () => dispatch({ type: 'increment-counter' }),
+      [dispatch]
+    )
     
     // const pokeData = useSelector((state) => state[PokeStorage.STORAGE_NAME_POKEMON][PokeStorage.STORAGE_POKE_DATA][itemData.id], shallowEqual);
-    const pokeData = useSelector((state)=>PokeStorage.selectorPokemonDataByID(state,itemData.id), shallowEqual);
+    const pokeData = useSelector((state)=>PokeStorage.selectorPokemonDataByID(state,itemData.id), shallowEqual)
     // const pokeData = PokeStorage.getPokemonDataByID(props, itemData.id);
 
-    const pokeTypeColor = Colors.COLOR_POKE_TYPE[pokeData && pokeData.data.types && pokeData.data.types[0] && pokeData.data.types[0].name];
+    const pokeTypeColor = Colors.COLOR_POKE_TYPE[pokeData && pokeData.data.types && pokeData.data.types[0] && pokeData.data.types[0].name]
 
 
 
@@ -80,7 +86,7 @@ const PokemonListItem = memo((props) => {
         }
 
         return unmounted
-    })
+    }, [pokeData])
 
     return (
         <>
@@ -109,10 +115,7 @@ const PokemonListItem = memo((props) => {
 
 export default PokemonListItem
 
-// const mapStateToProps = state => ({
-//     [PokeStorage.STORAGE_POKE_DATA]: PokeStorage.getStorageByName(state, PokeStorage.STORAGE_POKE_DATA),
-// })
-  
-// export default connect(mapStateToProps)(PokemonListItem);
-
-
+PokemonListItem.propTypes = {
+    itemData: PropTypes.object.isRequired,
+    onClick: PropTypes.func.isRequired,
+}
