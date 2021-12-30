@@ -3,7 +3,7 @@ import * as Config from "_constants/Config";
 
 export function debugStr(str) {
     if(Config.IS_DEBUG) {
-      console.log("%c" + str, 'background: #222; color: #bada55');
+      console.log(str);
     }
   }
   
@@ -47,4 +47,6 @@ export function debugGroupExpandCollapsed(groupTitle, items, isCollapsed) {
     }
   }
 
-  
+export function error(exception, message) {
+  console.error(exception, message);
+} 
