@@ -27,15 +27,15 @@ const styles = StyleSheet.create({
         width: '100%',
         borderWidth: 2,
         borderColor: '#000000',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'transparent',
         marginTop: 2,
     },
     checked: {
-        backgroundColor: '#999912',
+        backgroundColor: '#000',
     }
 })
 
-const PokeStatsBarItem = ({statsValue, key, style}) => {
+const PokeStatsBarItem = ({statsValue, key, style, colorActiveBar}) => {
 
     const spaceRender = getSpaceObject(statsValue)
     
@@ -44,7 +44,7 @@ const PokeStatsBarItem = ({statsValue, key, style}) => {
         <View style={style}>
             {
                 spaceRender.map((item,idx)=>(
-                    <View key={`${key}-${idx}`} style={[styles.barItem, (item===1 && styles.checked)]} />
+                    <View key={`${key}-${idx}`} style={[styles.barItem, (item===1 && styles.checked), (item===1 && colorActiveBar && { backgroundColor: colorActiveBar, })]} />
                 ))
             }
         </View>

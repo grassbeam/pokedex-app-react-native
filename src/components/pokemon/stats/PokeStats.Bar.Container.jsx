@@ -20,18 +20,23 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 2,
     }, 
-    labelStyle: {
+    styleLabel: {
         textAlign: 'center',
         textTransform: 'capitalize',
     },
 })
 
-const PokeStatsBarContainer = ({ dataStat, style, labelStyle, barStyle }) => {
+const PokeStatsBarContainer = ({ dataStat, style, styleLabel, styleBar, colorActiveBar }) => {
 
     return (
         <View style={[ styles.container, (style || {}), ]} >
-            <PokeStatsBar statsValue={dataStat.base_stat} key={dataStat.stat.name} style={ barStyle || {}} />
-            <Text style={[ styles.labelStyle, (labelStyle || {}), ]} >{ labelProcessing(dataStat && dataStat.stat && dataStat.stat.name) }</Text>
+            <PokeStatsBar 
+                key={dataStat.stat.name} 
+                style={ styleBar || {}} 
+                colorActiveBar={colorActiveBar}
+                statsValue={dataStat.base_stat} 
+            />
+            <Text style={[ styles.styleLabel, (styleLabel || {}), ]} >{ labelProcessing(dataStat && dataStat.stat && dataStat.stat.name) }</Text>
         </View>
     )
 }

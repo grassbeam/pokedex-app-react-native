@@ -17,19 +17,22 @@ const styles = StyleSheet.create({
     },
 })
 
-const PokeStatsContainer = ({ pokeID, }) => {
+const PokeStatsContainer = ({ pokeID, style, colorActiveBar, styleLabel, styleBarItem, styleBarItemContainer }) => {
     
     const pokeStats = useSelector((state)=>PokeStorage.selectorPokemonStatsByID(state, pokeID), shallowEqual)
 
 
     return(
-        <View style={styles.container}>
+        <View style={[ styles.container, (style || {}) ]}>
             {
                 
                 pokeStats && pokeStats.map((itm, idx)=>(
                     <PokeStatsBarContainer
                         key={`poke-base-stat-${idx}`}
-                        style={styles.itemBarContainer}
+                        style={[ styles.itemBarContainer, (styleBarItemContainer || {}) ]}
+                        styleBar={styleBarItem}
+                        styleLabel={styleLabel}
+                        colorActiveBar={colorActiveBar}
                         dataStat={itm}
                     />
                 ))
