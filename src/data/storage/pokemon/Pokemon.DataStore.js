@@ -15,6 +15,7 @@ export const STORAGE_LAST_ACTION = "LastAction";
 export const STORAGE_POKE_LIST = "PokeListId";
 export const STORAGE_POKE_DATA = "PokeData";
 export const STORAGE_POKE_SPECIES = "PokeSpecies";
+export const STORAGE_POKE_EVOLUTION = "PokeEvolution";
 export const STORAGE_POKE_COMPARE = "PokeCompareStatus";
 
 
@@ -41,6 +42,7 @@ const initialState = {
        */
      }, // pokemon data, object key using PokemonID
     [STORAGE_POKE_SPECIES]: { }, // pokemon species object
+    [STORAGE_POKE_EVOLUTION]: { }, // pokemon evolution chain
     [STORAGE_POKE_COMPARE]: {  }, // index = pokemonID, value 0/1/99 => 0=failed or not found, 1=success, 99=waiting
 }
 
@@ -137,6 +139,11 @@ export const selectorPokemonDataByID = createSelector(
   (pokeData, pokeID) => pokeData[pokeID]
 )
 
+export const selectorPokemonStatsByID = createSelector(
+  (state) => state[STORAGE_NAME_POKEMON][STORAGE_POKE_DATA],
+  (_, pokeID) => pokeID,
+  (pokeData, pokeID) => (pokeData[pokeID] && pokeData[pokeID]["data"] && pokeData[pokeID]["data"]["stats"])
+)
 
 // ======= GETTER FUNCTION ======= //
 

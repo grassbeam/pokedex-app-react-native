@@ -43,5 +43,5 @@ const PokeTypeList = ({ style, styleText, pokeID }) => {
 export default PokeTypeList
 
 PokeTypeList.propTypes = {
-    dataTypes: PropTypes.array.isRequired,
+    pokeID: PropTypes.string.isRequired,
 }

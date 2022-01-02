@@ -1,7 +1,7 @@
 import React, { memo, useEffect, } from 'react';
 import {  shallowEqual, useSelector,  } from "react-redux";
 import PropTypes from 'prop-types';
-import { View, Dimensions, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import { View, Dimensions, useWindowDimensions, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import * as Colors from '_styles/Colors';
 import * as PokeStorage from '_data/storage/pokemon/Pokemon.DataStore';
@@ -63,7 +63,7 @@ const LoadingItem = memo(({style}) => {
 const PokemonListItem = memo((props) => {
 
     const { itemData, onClick } = props
-    
+    const { height, width } = useWindowDimensions();
     // const pokeData = useSelector((state) => state[PokeStorage.STORAGE_NAME_POKEMON][PokeStorage.STORAGE_POKE_DATA][itemData.id], shallowEqual);
     const pokeData = useSelector((state)=>PokeStorage.selectorPokemonDataByID(state,itemData.id), shallowEqual)
     // const pokeData = PokeStorage.getPokemonDataByID(props, itemData.id);
@@ -94,7 +94,7 @@ const PokemonListItem = memo((props) => {
                             pokeID={itemData.id}
                         />
                         <PokePreviewImage
-                            style={styles.imagePoke}
+                            style={[styles.imagePoke, { height: (width*20/100), margin: 2,  }]}
                             pokeID={itemData.id}
                         />
                         {/* <Image
