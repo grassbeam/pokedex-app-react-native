@@ -1,12 +1,13 @@
-import React, { memo, useEffect, useCallback, } from 'react';
-import {  shallowEqual, useSelector, useDispatch,  } from "react-redux";
+import React, { memo, useEffect, } from 'react';
+import {  shallowEqual, useSelector,  } from "react-redux";
 import PropTypes from 'prop-types';
 import { View, Dimensions, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import PokeTypeList from '_components/pokemon/typelist'
-import * as Colors from '_styles/Colors'
+import * as Colors from '_styles/Colors';
 import * as PokeStorage from '_data/storage/pokemon/Pokemon.DataStore';
 import { Log, } from '_helpers';
+import PokeTypeList from '_components/pokemon/typelist';
+import PokePreviewImage from '_components/pokemon/preview/PokePreview.Image';
 
 const styles = StyleSheet.create({
     itemContainer: {
@@ -62,13 +63,6 @@ const LoadingItem = memo(({style}) => {
 const PokemonListItem = memo((props) => {
 
     const { itemData, onClick } = props
-
-    const dispatch = useDispatch()
-
-    const incrementCounter = useCallback(
-      () => dispatch({ type: 'increment-counter' }),
-      [dispatch]
-    )
     
     // const pokeData = useSelector((state) => state[PokeStorage.STORAGE_NAME_POKEMON][PokeStorage.STORAGE_POKE_DATA][itemData.id], shallowEqual);
     const pokeData = useSelector((state)=>PokeStorage.selectorPokemonDataByID(state,itemData.id), shallowEqual)
@@ -97,12 +91,16 @@ const PokemonListItem = memo((props) => {
                     <View style={styles.detailContainer}>
                         <PokeTypeList 
                             style={styles.detailTextContainer}
-                            dataTypes={pokeData.data.types}
+                            pokeID={itemData.id}
                         />
-                        <Image
+                        <PokePreviewImage
+                            style={styles.imagePoke}
+                            pokeID={itemData.id}
+                        />
+                        {/* <Image
                             style={styles.imagePoke}
                             source={{ uri: (pokeData.data.image.other.official_artwork || pokeData.data.image.front_default) }}
-                        />
+                        /> */}
                     </View>
                 </TouchableOpacity>
                 :

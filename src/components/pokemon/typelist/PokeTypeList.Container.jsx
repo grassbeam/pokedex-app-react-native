@@ -1,8 +1,9 @@
-import React, { memo, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {  shallowEqual, useSelector  } from "react-redux";
-import { View, Dimensions, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, } from "react-native";
 import * as Colors from '_styles/Colors'
+import * as PokeStorage from '_data/storage/pokemon/Pokemon.DataStore';
 
 
 
@@ -18,15 +19,18 @@ const styles = StyleSheet.create({
     }
 });
 
-const PokeTypeList = ({ style, dataTypes }) => {
+const PokeTypeList = ({ style, styleText, pokeID }) => {
+
+    
+    const pokeData = useSelector((state)=>PokeStorage.selectorPokemonDataByID(state, pokeID), shallowEqual)
 
     return (
         <View style={style}>
             {
-                dataTypes && dataTypes.map((itm,idx)=>(
+                pokeData.data.types && pokeData.data.types.map((itm,idx)=>(
                     <Text 
                         key={`poke-types-${idx}`}
-                        style={[styles.textPokeType, Colors.COLOR_POKE_TYPE[itm.name || '']]}
+                        style={[styles.textPokeType, Colors.COLOR_POKE_TYPE[itm.name || ''], (styleText || {})]}
                     >
                         {(itm.name && itm.name.toUpperCase()) || "Unknown"}
                     </Text>
